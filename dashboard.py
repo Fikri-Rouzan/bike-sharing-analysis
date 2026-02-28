@@ -1,7 +1,6 @@
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 import streamlit as st
+import plotly.express as px
 
 
 @st.cache_data
@@ -68,15 +67,19 @@ with st.sidebar:
     st.image("https://cdn-icons-png.flaticon.com/512/2972/2972185.png", width=150)
     st.title("Bike Sharing Data")
 
-    try:
-        start_date, end_date = st.date_input(
-            label="Pilih Rentang Waktu",
-            min_value=min_date,
-            max_value=max_date,
-            value=[min_date, max_date],
+    date_range = st.date_input(
+        label="Pilih Rentang Waktu",
+        min_value=min_date,
+        max_value=max_date,
+        value=[min_date, max_date],
+    )
+
+    if len(date_range) == 2:
+        start_date, end_date = date_range
+    else:
+        st.warning(
+            "⚠️ Silakan pilih tanggal mulai dan tanggal akhir untuk memproses data."
         )
-    except ValueError:
-        st.error("Silakan pilih tanggal akhir untuk memproses data.")
         st.stop()
 
     st.caption(
@@ -93,8 +96,8 @@ main_hour_df = hour_df[
 ]
 
 # Header
-st.title("🚲 Dashboard Analisis Penyewaan Sepeda")
-st.markdown("Menampilkan insight dan visualisasi  dari Bike Sharing Dataset.")
+st.title("Dashboard Analisis Penyewaan Sepeda 🚲")
+st.markdown("Menampilkan insight dan visualisasi dari Bike Sharing Dataset.")
 
 # Metrik ringkasan
 col1, col2, col3 = st.columns(3)
@@ -112,63 +115,95 @@ st.markdown("---")
 
 # Visualisasi 1
 st.subheader("Pengaruh Musim dan Cuaca Terhadap Penyewaan Sepeda Harian")
-fig1, ax1 = plt.subplots(figsize=(10, 6))
-sns.barplot(
+season_weather_df = (
+    main_day_df.groupby(["season", "weathersit"])["cnt"].mean().reset_index()
+)
+
+fig1 = px.bar(
+    season_weather_df,
     x="season",
     y="cnt",
-    hue="weathersit",
-    data=main_day_df,
-    palette="viridis",
-    errorbar=None,
-    ax=ax1,
+    color="weathersit",
+    barmode="group",
+    title="Rata-Rata Penyewaan Berdasarkan Musim dan Cuaca",
+    labels={
+        "season": "Musim",
+        "cnt": "Rata-Rata Penyewaan",
+        "weathersit": "Kondisi Cuaca",
+    },
+    color_discrete_sequence=px.colors.sequential.Blues_r,
 )
-ax1.set_title("Rata-Rata Penyewaan Berdasarkan Musim dan Cuaca", fontsize=14)
-ax1.set_xlabel("Musim")
-ax1.set_ylabel("Rata-Rata Penyewaan")
-ax1.legend(title="Kondisi Cuaca")
-st.pyplot(fig1)
+
+# Posisi legend
+fig1.update_layout(
+    legend=dict(
+        title="Kondisi Cuaca",
+        orientation="h",
+        yanchor="top",
+        y=-0.4,
+        xanchor="center",
+        x=0.5,
+    )
+)
+st.plotly_chart(fig1, width="stretch")
 
 st.markdown("---")
 
 # Visualisasi 2
 st.subheader("Pola Penyewaan Sepeda Berdasarkan Jam di Hari Kerja dan Hari Libur")
-fig2, ax2 = plt.subplots(figsize=(12, 6))
-custom_color = {"Hari Libur/Akhir Pekan": "red", "Hari Kerja": "blue"}
-sns.lineplot(
+hourly_trend_df = (
+    main_hour_df.groupby(["hr", "Keterangan Hari"])["cnt"].mean().reset_index()
+)
+
+fig2 = px.line(
+    hourly_trend_df,
     x="hr",
     y="cnt",
-    hue="Keterangan Hari",
-    data=main_hour_df,
-    palette=custom_color,
-    marker="o",
-    linewidth=2,
-    ax=ax2,
+    color="Keterangan Hari",
+    markers=True,
+    title="Tren Penyewaan Berdasarkan Jam Operasional",
+    labels={"hr": "Jam (0 - 23)", "cnt": "Rata-Rata Penyewaan"},
+    color_discrete_map={"Hari Libur/Akhir Pekan": "#ff7f0e", "Hari Kerja": "#1f77b4"},
 )
-ax2.set_title("Tren Penyewaan Berdasarkan Jam Operasional", fontsize=14)
-ax2.set_xlabel("Jam (0 - 23)")
-ax2.set_ylabel("Rata-rata Penyewaan")
-ax2.set_xticks(range(0, 24))
-st.pyplot(fig2)
+
+# Posisi legend
+fig2.update_layout(
+    legend=dict(
+        title="Keterangan Hari",
+        orientation="h",
+        yanchor="top",
+        y=-0.4,
+        xanchor="center",
+        x=0.5,
+    )
+)
+
+fig2.update_xaxes(dtick=1, tickangle=-45)
+st.plotly_chart(fig2, width="stretch")
 
 st.markdown("---")
 
 # Visualisasi 3
 st.subheader("Rata-Rata Penyewaan Sepeda Berdasarkan Cluster Waktu")
-fig3, ax3 = plt.subplots(figsize=(10, 6))
-sns.barplot(
+time_cluster_df = (
+    main_hour_df.groupby("time_category", observed=True)["cnt"].mean().reset_index()
+)
+
+max_value = time_cluster_df["cnt"].max()
+colors = [
+    "#1f77b4" if val == max_value else "#d3d3d3" for val in time_cluster_df["cnt"]
+]
+
+fig3 = px.bar(
+    time_cluster_df,
     x="time_category",
     y="cnt",
-    hue="time_category",
-    data=main_hour_df,
-    palette="magma",
-    errorbar=None,
-    legend=False,
-    ax=ax3,
+    title="Cluster Waktu (Binning) Penyewaan Sepeda",
+    labels={"time_category": "Cluster Waktu (Binning)", "cnt": "Rata-Rata Penyewaan"},
 )
-ax3.set_title("Cluster Waktu (Binning) Penyewaan Sepeda", fontsize=14)
-ax3.set_xlabel("Cluster Waktu (Binning)")
-ax3.set_ylabel("Rata-Rata Penyewaan")
-st.pyplot(fig3)
+
+fig3.update_traces(marker_color=colors)
+st.plotly_chart(fig3, width="stretch")
 
 st.markdown("---")
 st.caption("© 2026 Muhammad Fikri Rouzan Ash Shidik")
