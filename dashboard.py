@@ -191,7 +191,7 @@ time_cluster_df = (
 
 max_value = time_cluster_df["cnt"].max()
 colors = [
-    "#1f77b4" if val == max_value else "#d3d3d3" for val in time_cluster_df["cnt"]
+    "#1f77b4" if val == max_value else "#aec7e8" for val in time_cluster_df["cnt"]
 ]
 
 fig3 = px.bar(
