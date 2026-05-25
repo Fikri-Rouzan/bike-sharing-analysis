@@ -5,8 +5,8 @@ import plotly.express as px
 
 @st.cache_data
 def load_data():
-    day_df = pd.read_csv("bike_sharing_day_dataset.csv")
-    hour_df = pd.read_csv("bike_sharing_hour_dataset.csv")
+    day_df = pd.read_csv("data/bike_sharing_day.csv")
+    hour_df = pd.read_csv("data/bike_sharing_hour.csv")
 
     # Mengubah tipe data dteday
     day_df["dteday"] = pd.to_datetime(day_df["dteday"])
@@ -125,6 +125,7 @@ fig1 = px.bar(
     y="cnt",
     color="weathersit",
     barmode="group",
+    category_orders={"season": ["Semi", "Panas", "Gugur", "Dingin"]},
     title="Rata-Rata Penyewaan Berdasarkan Musim dan Cuaca",
     labels={
         "season": "Musim",
@@ -146,6 +147,13 @@ fig1.update_layout(
     )
 )
 st.plotly_chart(fig1, width="stretch")
+
+# Insight visualisasi 1
+with st.expander("Lihat Insight"):
+    st.markdown("""
+    - Dari grafik terlihat jelas bahwa musim gugur menyumbang jumlah penyewaan sepeda tertinggi dibandingkan musim lainnya. Sebaliknya, musim semi adalah waktu yang paling sepi penyewa.
+    - Terlepas dari apa pun musimnya, cuaca cerah selalu menjadi kondisi favorit pelanggan untuk menyewa sepeda. Saat cuaca berubah menjadi berawan, terjadi penurunan jumlah penyewa. Penurunan ini semakin tajam dan drastis saat cuaca buruk seperti hujan/bersalju. Hal ini menunjukkan bahwa operasional bisnis ini sangat rentan terhadap perubahan cuaca.
+    """)
 
 st.markdown("---")
 
@@ -181,6 +189,13 @@ fig2.update_layout(
 fig2.update_xaxes(dtick=1, tickangle=-45)
 st.plotly_chart(fig2, width="stretch")
 
+# Insight visualisasi 2
+with st.expander("Lihat Insight"):
+    st.markdown("""
+    - Terdapat dua puncak lonjakan aktivitas yang sangat menonjol, yaitu **sekitar pukul 08:00 pagi** dan rentang **pukul 17:00 hingga 18:00 sore** pada hari kerja. Pola ini mengonfirmasi bahwa pada hari kerja, mayoritas sepeda disewa oleh para pelanggan untuk mobilitas berangkat dan pulang bekerja atau bersekolah.
+    - Grafik penyewaan membentuk kurva cembung tunggal pada hari libur/akhir pekan. Penyewaan mulai stabil meningkat sejak pagi hari dan mencapai puncaknya pada siang hingga sore hari (**sekitar pukul 12:00 - 16:00**). Hal ini mengindikasikan bahwa pada hari libur, pelanggan menyewa sepeda untuk keperluan rekreasi, jalan-jalan santai, atau berolahraga, bukan untuk mobilitas yang terburu-buru.
+    """)
+
 st.markdown("---")
 
 # Visualisasi 3
@@ -205,5 +220,48 @@ fig3 = px.bar(
 fig3.update_traces(marker_color=colors)
 st.plotly_chart(fig3, width="stretch")
 
+# Insight visualisasi 3
+with st.expander("Lihat Insight"):
+    st.markdown("""
+    - Melalui teknik pengelompokan (*Binning*), rentang waktu 24 jam berhasil disederhanakan menjadi 4 *cluster* utama, yaitu Pagi (03:00 - 10:00), Siang (11:00 - 14:00), Sore (15:00 - 19:00), dan Malam (20:00 - 02:00).
+    - Visualisasi mengonfirmasi bahwa periode **Sore** memiliki rata-rata penyewaan sepeda tertinggi, diikuti oleh waktu siang dan pagi. Dominasi pada waktu sore ini sangat selaras dengan lonjakan aktivitas komuter masyarakat saat pulang kerja atau sekolah. Sebaliknya, waktu malam mencatat aktivitas penyewaan terendah seiring dengan menurunnya mobilitas masyarakat di luar ruangan.
+    """)
+
+st.markdown("---")
+
+# Kesimpulan
+st.subheader("Kesimpulan")
+
+# Kesimpulan visualisasi 1
+with st.expander("Kesimpulan Visualisasi 1"):
+    st.info("""
+    Musim dan cuaca memiliki dampak yang sangat signifikan terhadap bisnis penyewaan sepeda. Musim gugur adalah waktu 
+    yang paling menguntungkan dengan rata-rata penyewaan tertinggi, sedangkan musim semi merupakan titik terendah. Dari 
+    segi cuaca, mayoritas pelanggan sangat memilih untuk menyewa sepeda pada cuaca cerah. Sebaliknya, terjadi penurunan 
+    penyewaan yang sangat drastis ketika cuaca berubah menjadi buruk (hujan/bersalju). Oleh karena itu, persiapan 
+    operasional dan perawatan sepeda paling baik difokuskan pada saat cuaca buruk ketika permintaan sedang rendah.
+    """)
+
+# Kesimpulan visualisasi 2
+with st.expander("Kesimpulan Visualisasi 2"):
+    st.info("""
+    Terdapat perbedaan pola perilaku pelanggan yang sangat kontras antara hari kerja dan hari libur. Pada hari kerja, 
+    pola penyewaan membentuk dua puncak lonjakan pada jam 08:00 pagi dan 17:00-18:00 sore, yang merupakan jam berangkat 
+    dan pulang bekerja atau bersekolah. Hal ini menunjukkan bahwa sepeda digunakan sebagai alat transportasi komuter harian. 
+    Sebaliknya, pada hari libur, polanya berubah menjadi satu puncak yang landai di siang hingga sore hari 
+    (pukul 12:00-16:00), mengindikasikan bahwa penggunaan sepeda lebih condong untuk rekreasi atau olahraga santai.
+    """)
+
+# Kesimpulan visualisasi 3
+with st.expander("Kesimpulan Visualisasi 3"):
+    st.info("""
+    Melalui teknik pengelompokan waktu (binning), dapat disimpulkan bahwa "Sore" (15:00 - 19:00) merupakan periode puncak 
+    operasional dengan tingkat penyewaan tertinggi. Tingginya permintaan di rentang waktu ini mengonfirmasi besarnya porsi 
+    pelanggan komuter. Sebagai rekomendasi operasional, pihak pengelola perlu memastikan ketersediaan armada sepeda yang 
+    maksimal di stasiun-stasiun penyewaan menjelang sore hari. Sementara itu, periode "Malam" yang menjadi titik terendah 
+    penyewaan dapat dimanfaatkan secara optimal untuk penataan ulang sepeda atau pemeliharaan ringan.
+    """)
+
+# Footer
 st.markdown("---")
 st.caption("© 2026 Muhammad Fikri Rouzan Ash Shidik")
