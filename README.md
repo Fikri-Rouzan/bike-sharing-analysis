@@ -1,6 +1,6 @@
 # Bike Sharing Analysis
 
-## 📌 Deskripsi Proyek
+## 📌 Deskripsi
 
 Dashboard ini berfokus pada analisis data penggunaan sistem berbagi sepeda untuk mengidentifikasi pola, tren, dan berbagai faktor yang memengaruhi jumlah penyewaan. Melalui eksplorasi data historis baik harian maupun per jam, sistem ini menyajikan visualisasi interaktif untuk membantu memahami perilaku pengguna, dampak kondisi cuaca, serta pengaruh waktu terhadap permintaan sepeda. Hasil analisis ini dirancang untuk memberikan wawasan strategis dalam mengoptimalkan manajemen operasional dan efisiensi distribusi sepeda di area perkotaan.
 
