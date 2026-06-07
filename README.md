@@ -2,7 +2,13 @@
 
 ## 📌 Deskripsi
 
-Dashboard ini berfokus pada analisis data penggunaan sistem berbagi sepeda untuk mengidentifikasi pola, tren, dan berbagai faktor yang memengaruhi jumlah penyewaan. Melalui eksplorasi data historis baik harian maupun per jam, sistem ini menyajikan visualisasi interaktif untuk membantu memahami perilaku pengguna, dampak kondisi cuaca, serta pengaruh waktu terhadap permintaan sepeda. Hasil analisis ini dirancang untuk memberikan wawasan strategis dalam mengoptimalkan manajemen operasional dan efisiensi distribusi sepeda di area perkotaan.
+Dashboard ini dirancang untuk menganalisis data penggunaan sistem berbagi sepeda guna mengidentifikasi pola, tren, dan berbagai faktor yang memengaruhi jumlah penyewaan. Melalui eksplorasi data historis, sistem ini memetakan volume penyewaan berdasarkan pengaruh kondisi cuaca, parameter waktu, serta variasi musim. Hasil analisis dari dashboard ini ditujukan untuk membantu pengelola dalam memahami fluktuasi permintaan daya angkut sepeda guna mendukung manajemen operasional dan efisiensi distribusi armada di area perkotaan.
+
+---
+
+## 💾 Dataset
+
+Dataset yang digunakan dalam dashboard ini memuat catatan riwayat aktivitas penyewaan sepeda yang dikorelasikan dengan kondisi cuaca dan waktu. Data terstruktur ini terbagi menjadi dua basis pencatatan, yaitu data harian yang memuat hasil agregasi aktivitas penyewaan per hari serta data per jam yang merekam aktivitas secara mendetail setiap jamnya. Kedua bagian data tersebut memuat parameter penting seperti indeks cuaca, musim, temperatur, kelembapan, kecepatan angin, keterangan hari kerja atau hari libur, serta jumlah total penyewaan baik dari pengguna biasa maupun pengguna yang telah terdaftar.
 
 ---
 
