@@ -19,7 +19,7 @@ Dataset yang digunakan dalam dashboard ini memuat catatan riwayat aktivitas peny
 | 🌐 **Programming Language** | `Python`                                    |
 | 🌱 **Environment**          | `Jupyter Notebook`                          |
 | 🧩 **Framework**            | `Streamlit`                                 |
-| ⚛️ **Libraries**            | `pandas`, `Matplotlib`, `seaborn`, `Plotly` |
+| ⚛️ **Libraries**            | `pandas`, `matplotlib`, `seaborn`, `plotly` |
 | ⚡ **Tool**                 | `Google Colab`                              |
 | 🚀 **Deployment**           | `Streamlit Community Cloud`                 |
 
